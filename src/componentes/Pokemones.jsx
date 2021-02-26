@@ -8,7 +8,7 @@ const Pokemones = () => {
     const dispatch = useDispatch()
     const pokemone = useSelector(store => store.pokemones.array)
 
-    const uno = 2
+    const uno = 45655
 
     return ( <div>lista de pokemones
 
