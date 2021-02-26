@@ -2,12 +2,13 @@ import axios from 'axios'
 
 // constantes
 const dataInicial ={
-    array:[]
+    array:[],
+    offset:0
 }
 
 //types
-const OBTENET_POKEMONES_EXITO = 'obtener_pokemones_exito';
-
+const OBTENET_POKEMONES_EXITO = 'obtener_pokemones_exito'
+const MAS_POKEMONES_EXITO = 'MAS_POKEMONES_EXITO'
 
 //reducer
 export default function PokeReducer(state = dataInicial, action){
@@ -15,6 +16,8 @@ export default function PokeReducer(state = dataInicial, action){
     switch(action.type){
         case OBTENET_POKEMONES_EXITO:
             return {...state , array: action.payload}
+        case MAS_POKEMONES_EXITO:
+            return {...state , array: action.payload.array, offset: action.payload.offset}
         default:
             return state
     }
@@ -22,9 +25,10 @@ export default function PokeReducer(state = dataInicial, action){
 
 //acciones
 export const obtenerpokemonesaccion = (uno) => async (dispatch,getState) =>{
-    console.log(uno)
+    /* console.log(uno) */
+    const offset = getState().pokemones.offset
     try {
-    const res = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=0&limit=20')
+    const res = await axios.get('https://pokeapi.co/api/v2/pokemon?offset='+offset+'&limit=20')
     dispatch({
         type: OBTENET_POKEMONES_EXITO,
         payload: res.data.results
@@ -34,7 +38,7 @@ export const obtenerpokemonesaccion = (uno) => async (dispatch,getState) =>{
     }
 }
 
-/* export const OCTENER_MAS_POKEMONES = () => async (dispatch,getState) => {
+ export const OCTENER_MAS_POKEMONES = () => async (dispatch,getState) => {
 
     const stado = getState().pokemones.offset
     const offSet = stado + 20
@@ -42,7 +46,7 @@ export const obtenerpokemonesaccion = (uno) => async (dispatch,getState) =>{
     try {
         const res = await axios.get(`https://pokeapi.co/api/v2/pokemon?offset=${offSet}&limit=20`)
         dispatch({
-            type:CAMBIO_POKEMONES_EXITO,
+            type:MAS_POKEMONES_EXITO,
             payload:{
                 array:res.data.results,
                 offset:offSet
@@ -54,4 +58,4 @@ export const obtenerpokemonesaccion = (uno) => async (dispatch,getState) =>{
         console.log(error)
     }
 
-} */
+} 
